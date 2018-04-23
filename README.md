@@ -5,7 +5,7 @@
 Projeto desenvolvido como exemplo do Curso Completo de JavaScript na Udemy.com.
 
 ### Projeto
-![WhatsApp Clone](https://firebasestorage.googleapis.com/v0/b/hcode-com-br.appspot.com/o/calculadora-hcode-win.png?alt=media&token=218a8f2a-b800-4d03-92e8-9e493a4e949f)
+![WhatsApp Clone](https://firebasestorage.googleapis.com/v0/b/hcode-com-br.appspot.com/o/whatsapp.jpg?alt=media&token=5fc78e3b-4871-424f-abfa-b765f2515d0c)
 
 ### Recursos Usados
 
