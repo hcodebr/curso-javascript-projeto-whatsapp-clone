@@ -13,8 +13,8 @@ Lista de recursos usados neste projeto
 
 | Recurso | Link |
 | ------ | ------ |
-| Firebase Authentication | [https://firebase.google.com/docs/auth/?authuser=0][PlDb] |
-| Cloud Firestore | [https://firebase.google.com/docs/firestore/?authuser=0][PlGh] |
-| Cloud Storage | [https://firebase.google.com/docs/storage/?authuser=0][PlGd] |
-| PDF.js | [https://mozilla.github.io/pdf.js/][PlOd] |
-| MediaDevices.getUserMedia() | [https://developer.mozilla.org/en-US/docs/Web/API/MediaDevices/getUserMedia][PlMe] |
+| Firebase Authentication | [https://firebase.google.com/docs/auth/?authuser=0] |
+| Cloud Firestore | [https://firebase.google.com/docs/firestore/?authuser=0] |
+| Cloud Storage | [https://firebase.google.com/docs/storage/?authuser=0] |
+| PDF.js | [https://mozilla.github.io/pdf.js/] |
+| MediaDevices.getUserMedia() | [https://developer.mozilla.org/en-US/docs/Web/API/MediaDevices/getUserMedia] |
