@@ -16119,3 +16119,6 @@ html[dir=rtl] ._2ICcy:after{
  .btn-reshoot {
      cursor: pointer;
 }
+#btn-save-panel-edit-profile {
+    cursor: pointer;
+}
