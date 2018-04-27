@@ -16069,6 +16069,7 @@ html[dir=rtl] ._2ICcy:after{
  .panel-down.open {
      display: block;
      transform: translateY(0px);
+     height: calc(100% - 120px);
 }
  .panel-left {
      height: 100%;
@@ -16078,7 +16079,7 @@ html[dir=rtl] ._2ICcy:after{
      -o-transition: 0.3s ease-in-out;
      transition: 0.3s ease-in-out;
 }
- .panel-left.open {
+.panel-left.open {
      display: block;
      transform: translateX(0px);
 }
@@ -16121,4 +16122,7 @@ html[dir=rtl] ._2ICcy:after{
 }
 #btn-save-panel-edit-profile {
     cursor: pointer;
+}
+.panel-main {
+    display: none;
 }
