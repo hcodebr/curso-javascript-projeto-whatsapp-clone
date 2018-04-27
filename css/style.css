@@ -3412,7 +3412,8 @@ html[dir] ._1ClcF{
 ._2Uo0Z{
     width:356px;
     height:355px;
-    transition:height .3s ease
+    transition:height .3s ease;
+    background-image: url(../img/HcodeWhatsAppClone.png);
 }
 html[dir] ._2Uo0Z{
     margin:0 auto;
@@ -16079,7 +16080,7 @@ html[dir=rtl] ._2ICcy:after{
      -o-transition: 0.3s ease-in-out;
      transition: 0.3s ease-in-out;
 }
-.panel-left.open {
+ .panel-left.open {
      display: block;
      transform: translateX(0px);
 }
@@ -16128,4 +16129,7 @@ html[dir=rtl] ._2ICcy:after{
 }
 #panel-emojis.open {
     transform: translateY(-320px);
+}
+#main {
+    display:none;
 }
