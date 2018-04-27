@@ -9865,7 +9865,8 @@ html[dir=rtl] ._1lcS_{
     overflow:visible
 }
 html[dir=ltr] .IuYNx{
-    left:0
+    left:0;
+    text-align: center;
 }
 html[dir=ltr] ._3XCI5,html[dir=rtl] .uYLZK{
     left:30px
@@ -14779,7 +14780,7 @@ html[dir] .r4crx ._2GgBs{
 .r4crx ._3m_5X{
     z-index:2;
     height:100%;
-    width:100%
+    margin: 0 auto;
 }
 ._2k1om{
     -webkit-flex:1;
@@ -16070,7 +16071,6 @@ html[dir=rtl] ._2ICcy:after{
  .panel-down.open {
      display: block;
      transform: translateY(0px);
-     height: calc(100% - 120px);
 }
  .panel-left {
      height: 100%;
