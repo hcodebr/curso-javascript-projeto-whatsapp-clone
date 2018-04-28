@@ -16128,7 +16128,7 @@ html[dir=rtl] ._2ICcy:after{
     display: none;
 }
 #panel-emojis.open {
-    transform: translateY(-320px);
+    transform: translateY(0px);
 }
 #main {
     display:none;
