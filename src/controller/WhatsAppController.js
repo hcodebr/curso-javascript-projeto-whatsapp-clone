@@ -129,14 +129,14 @@ class WhatsAppController{
 
 		});
 
-		// Fecha o painel para Editar Perfil
+		// Fecha o painel de Editar Perfil
 		this.el.btnClosePanelEditProfile.on('click', e=> {
 
 			this.el.panelEditProfile.removeClass('open');
 
 		});
 
-		// Fecha o Painel para Adicionar Novo Contato
+		// Fecha o Painel de Adicionar Novo Contato
 		this.el.btnClosePanelAddContact.on('click', e => {
 
 			this.el.panelAddContact.removeClass('open');
@@ -237,6 +237,8 @@ class WhatsAppController{
 
 			});
 
+			this._camera = new CameraController(this.el.videoCamera);
+
 		});
 
 		// Fecha todos os painéis e abre a conversa
@@ -245,7 +247,6 @@ class WhatsAppController{
 			this.closeAllMainPanel();
 
 			this.el.panelMessagesContainer.show();
-
 
 		});
 
@@ -301,6 +302,144 @@ class WhatsAppController{
 
 		});
 
+		// Abre gravação do microfone
+		this.el.btnSendMicrophone.on('click', e => {
+
+			this.el.recordMicrophone.show();
+			this.el.btnSendMicrophone.hide();
+
+			this.startRecordMicrophoneTime();
+
+		});
+
+		// Cancela gravação do microfone
+		this.el.btnCancelMicrophone.on('click', e => {
+
+			this.closeRecordMicrophone();
+			
+
+		});
+
+		// Envia Gravação do Microfone
+		this.el.btnFinishMicrophone.on('click', e => {
+
+			this.closeRecordMicrophone();
+
+		});
+
+		// Enviar mensagem pela tecla Enter
+		this.el.inputText.on('keypress', e => {
+
+			if(e.key === 'Enter' && !e.ctrlKey){
+				e.preventDefault();
+				this.el.btnSend.click();
+			}
+
+		});
+
+		// Alterações de estilo na hora de digitar
+		this.el.inputText.on('keyup', e => {
+
+			if(this.el.inputText.innerHTML.length){
+
+				this.el.inputPlaceholder.hide();
+				this.el.btnSendMicrophone.hide();
+				this.el.btnSend.show();
+			
+			} else {
+
+				this.el.inputPlaceholder.show();
+				this.el.btnSendMicrophone.show();
+				this.el.btnSend.hide();
+
+			}
+
+		});
+
+		// Enviar Mensagem
+		this.el.btnSend.on('click', e => {
+
+			console.log(this.el.inputText.innerHTML);
+			this.el.inputText.innerHTML = '';
+			this.el.inputPlaceholder.show();
+
+		});
+
+		// Abrir/Fechar painel de emojis
+		this.el.btnEmojis.on('click', e => {
+
+			this.el.panelEmojis.toggleClass('open');
+
+		});
+
+		// Selecionar emoji
+		this.el.panelEmojis.querySelectorAll('.emojik').forEach(emoji => {
+
+			emoji.on('click', e => {
+
+				// Clona o emoji para a variável img
+				let img = this.el.imgEmojiDefault.cloneNode();
+				img.style.cssText = emoji.style.cssText;
+				img.dataset.unicode = emoji.dataset.unicode;
+				img.alt = emoji.alt;
+				emoji.classList.forEach(name => {
+					img.classList.add(name);
+				});
+
+				// Seleciona a posição onde está o cursor
+				let cursor = window.getSelection();
+
+				// Verifica o foco do cursor (onde ele está)
+				if(!cursor.focusNode || cursor.focusNode.id == 'input-text'){
+					this.el.inputText.focus();
+					cursor = window.getSelection();
+				}
+
+				// Pega a faixa de texto selecionada e apaga para colocar o emoji ali 
+				let range = document.createRange();
+				range = cursor.getRangeAt(0);
+				range.deleteContents();
+
+				// Cria um espaço para colocar a imagem do emoji
+				let frag = document.createDocumentFragment();
+				frag.appendChild(img);
+				range.insertNode(frag);
+
+				// Coloca o cursor depois da imagem do emoji
+				range.setStartAfter(img);
+
+				this.el.inputText.dispatchEvent(new Event('keyup'));
+
+			});
+
+		});
+
+	}
+
+	// Inicia o contador de tempo do Microfone
+	startRecordMicrophoneTime(){
+
+		let start = Date.now();
+
+		this._recordMicrophoneInterval = setInterval(() => {
+
+			this.el.recordMicrophoneTimer.innerHTML = Format.toTime(Date.now() - start);
+
+		}, 100);
+
+	}
+
+	// Fecha a gravação do Microfone
+	closeRecordMicrophone(){
+
+		this.el.recordMicrophone.hide();
+
+		this.el.btnSendMicrophone.show();
+
+		clearInterval(this._recordMicrophoneInterval);
+
+		this.el.recordMicrophoneTimer.innerHTML = Format.toTime(0);
+
 	}
 
 	// Fecha todos os painéis principais
@@ -327,6 +466,5 @@ class WhatsAppController{
 		this.el.panelAddContact.hide();
 
 	}
-
 
 }
