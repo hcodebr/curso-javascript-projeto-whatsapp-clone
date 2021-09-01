@@ -1,4 +1,4 @@
-class CameraController{
+export class CameraController{
 
 	constructor(videoEl){
 
@@ -9,7 +9,8 @@ class CameraController{
 		}).then(stream => {
 
 			// Cria um arquivo
-			this._videoEl.src = URL.createObjectURL(stream);
+			//this._videoEl.src = URL.createObjectURL(stream);
+			this._videoEl.srcObject = stream;
 
 			// Toca o vídeo
 			this._videoEl.play();
