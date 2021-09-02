@@ -1,5 +1,6 @@
 import {Format} from './../util/Format';
 import {CameraController} from './CameraController';
+import {DocumentPreviewController} from './DocumentPreviewController'
 
 export class WhatsAppController{
 	constructor(){
@@ -244,21 +245,57 @@ export class WhatsAppController{
 
 		});
 
-		// Fecha todos os painéis e abre a conversa
+		// Fecha todos os painéis, para a câmera e abre a conversa
 		this.el.btnClosePanelCamera.on('click', e => {
 
 			this.closeAllMainPanel();
 
 			this.el.panelMessagesContainer.show();
 
+			this._camera.stop();
+
 		});
 
 		// Tira foto
 		this.el.btnTakePicture.on('click', e=> {
 
-			console.log("take picture");
+			let dataUrl = this._camera.takePicture();
+
+			this.el.pictureCamera.src = dataUrl;
+
+			this.el.pictureCamera.show();
+
+			this.el.videoCamera.hide();
+
+			this.el.btnReshootPanelCamera.show();
+
+			this.el.containerTakePicture.hide();
+
+			this.el.containerSendPicture.show();
 
 		});
+
+		// Tirar foto novamente
+		this.el.btnReshootPanelCamera.on('click', e => {
+
+			this.el.pictureCamera.hide();
+
+			this.el.videoCamera.show();
+
+			this.el.btnReshootPanelCamera.hide();
+
+			this.el.containerTakePicture.show();
+
+			this.el.containerSendPicture.hide();
+
+		});
+
+		// Enviar foto
+		this.el.btnSendPicture.on('click', e => {
+
+			console.log(this.el.pictureCamera.src);
+
+		})
 
 		// Abre o Painel de Visualizar Documentos
 		this.el.btnAttachDocument.on('click', e => {
@@ -272,6 +309,39 @@ export class WhatsAppController{
 				'height':'calc(100% - 120px)'
 
 			});
+
+			// Clica no input de Documentos abrirá os documentos do computador para que um seja selecionado
+			this.el.inputDocument.click();
+
+		});
+
+		// Mostra o documento no painel de Pré-visualização
+		this.el.inputDocument.on('change', e => {
+
+			if(this.el.inputDocument.files.length){
+
+				let file = this.el.inputDocument.files[0];
+
+				this._documentPreviewController = new DocumentPreviewController(file);
+
+				// Traz o arquivo do DocumentPreviewController
+				this._documentPreviewController.getPreviewData().then(result => {
+
+					this.el.imgPanelDocumentPreview.src = result.src;
+					this.el.infoPanelDocumentPreview.innerHTML = result.info;
+					this.el.imagePanelDocumentPreview.show();
+					this.el.filePanelDocumentPreview.hide();
+
+				}).catch(err => {
+
+					this.el.iconPanelDocumentPreview.className = 'jcxhw icon-doc-generic';
+
+					this.el.filenamePanelDocumentPreview.innerHTML = file.name;
+					this.el.imagePanelDocumentPreview.hide();
+					this.el.filePanelDocumentPreview.show();
+
+				});
+			}
 
 		});
 
