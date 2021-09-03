@@ -1,6 +1,7 @@
 import {Format} from './../util/Format';
 import {CameraController} from './CameraController';
 import {DocumentPreviewController} from './DocumentPreviewController'
+import {MicrophoneController} from './MicrophoneController'
 
 export class WhatsAppController{
 	constructor(){
@@ -381,13 +382,28 @@ export class WhatsAppController{
 			this.el.recordMicrophone.show();
 			this.el.btnSendMicrophone.hide();
 
-			this.startRecordMicrophoneTime();
+			this._microphoneController = new MicrophoneController();
+
+			this._microphoneController.on('ready', musica => {
+
+				console.log('ready');
+
+				this._microphoneController.startRecorder();
+
+			});
+
+			this._microphoneController.on('recordtimer', timer => {
+
+				this.el.recordMicrophoneTimer.innerHTML = Format.toTime(timer);
+
+			});
 
 		});
 
 		// Cancela gravação do microfone
 		this.el.btnCancelMicrophone.on('click', e => {
 
+			this._microphoneController.stopRecorder();
 			this.closeRecordMicrophone();
 			
 
@@ -396,6 +412,7 @@ export class WhatsAppController{
 		// Envia Gravação do Microfone
 		this.el.btnFinishMicrophone.on('click', e => {
 
+			this._microphoneController.stopRecorder();
 			this.closeRecordMicrophone();
 
 		});
@@ -489,27 +506,12 @@ export class WhatsAppController{
 
 	}
 
-	// Inicia o contador de tempo do Microfone
-	startRecordMicrophoneTime(){
-
-		let start = Date.now();
-
-		this._recordMicrophoneInterval = setInterval(() => {
-
-			this.el.recordMicrophoneTimer.innerHTML = Format.toTime(Date.now() - start);
-
-		}, 100);
-
-	}
-
 	// Fecha a gravação do Microfone
 	closeRecordMicrophone(){
 
 		this.el.recordMicrophone.hide();
 
 		this.el.btnSendMicrophone.show();
-
-		clearInterval(this._recordMicrophoneInterval);
 
 		this.el.recordMicrophoneTimer.innerHTML = Format.toTime(0);
 
