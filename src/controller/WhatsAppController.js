@@ -2,13 +2,25 @@ import {Format} from './../util/Format';
 import {CameraController} from './CameraController';
 import {DocumentPreviewController} from './DocumentPreviewController'
 import {MicrophoneController} from './MicrophoneController'
+import {Firebase} from './../util/Firebase'
 
 export class WhatsAppController{
 	constructor(){
 		console.log("olá WhatsApp");
+
+		this._firebase = new Firebase();
+		this.initAuth();
 		this.loadElements();
 		this.elementsPrototype();
 		this.initEvents();
+	}
+
+	initAuth(){
+		this._firebase.initAuth().then(response=>{
+			console.log('response',response);
+		}). catch(err=>{
+			console.error(err);
+		});
 	}
 
 	// Percorre os elementos da tela e os coloca em this.el
