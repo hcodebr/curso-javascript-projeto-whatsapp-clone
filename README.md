@@ -38,6 +38,7 @@ Webpack 3.1.0 e Webpack Dev Server 2.5.1:
 ```bash
 npm install webpack@3.1.0 --save
 npm install webpack-dev-server@2.5.1 --save
+npm install firebase --save
 ```
 
 ### Alterando o arquivo package.json
