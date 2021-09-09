@@ -7,6 +7,7 @@ import 'firebase/compat/firestore';
 export class Firebase{
   constructor(){
     this._config = {
+        // configurações do firebase
     }
     this.init();
   }
