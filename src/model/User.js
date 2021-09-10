@@ -32,6 +32,13 @@ export class User extends Model{
 		this._data.photo = value;
 	}
 
+	get chatId(){
+		return this._data.chatId;
+	}
+	set chatId(value){
+		this._data.chatId = value;
+	}
+
 	// Retorna a promessa com os documentos do usuário
 	getById(id){
 

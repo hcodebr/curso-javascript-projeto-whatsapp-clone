@@ -4,6 +4,8 @@ import {DocumentPreviewController} from './DocumentPreviewController'
 import {MicrophoneController} from './MicrophoneController'
 import {Firebase} from './../util/Firebase'
 import {User} from './../model/User'
+import {Chat} from './../model/Chat'
+import {Message} from './../model/Message'
 
 export class WhatsAppController{
 	constructor(){
@@ -136,21 +138,7 @@ export class WhatsAppController{
 
 				div.on('click', e=>{
 
-					this.el.activeName.innerHTML = contact.name;
-					this.el.activeStatus.innerHTML = contact.status;
-
-					if(contact.photo){
-
-						let img = this.el.activePhoto;
-						img.src = contact.photo;
-						img.show();
-
-					}
-
-					this.el.home.hide();
-					this.el.main.css({
-						display:'flex'
-					})
+					this.setActiveChat(contact);
 
 				});			
 
@@ -162,6 +150,64 @@ export class WhatsAppController{
 		});
 
 		this._user.getContacts();
+	}
+
+	// Faz o chat do contato especificado aparecer
+	setActiveChat(contact){
+
+		if(this._contactActive){
+
+			Message.getRef(this._contactActive.chatId).onSnapshot(() => {});
+
+		}
+
+		this._contactActive = contact;
+
+		this.el.activeName.innerHTML = contact.name;
+		this.el.activeStatus.innerHTML = contact.status;
+
+		if(contact.photo){
+
+			let img = this.el.activePhoto;
+			img.src = contact.photo;
+			img.show();
+
+		}
+
+		this.el.home.hide();
+		this.el.main.css({
+			display:'flex'
+		})
+
+		// Ordenação das mensagens na tela
+		Message.getRef(this._contactActive.chatId).orderBy('timeStamp')
+		.onSnapshot(docs=>{
+
+			this.el.panelMessagesContainer.innerHTML = '';
+
+			docs.forEach(doc => {
+
+				let data = doc.data();
+				data.id = doc.id;
+
+				if(!this.el.panelMessagesContainer.querySelector('#'+data.id)){
+
+					let message = new Message();
+
+					message.fromJSON(data);
+
+					let me = (data.from === this._user.email);
+
+					let view = message.getViewElement(me);
+
+					this.el.panelMessagesContainer.appendChild(view);
+
+				}				
+
+			});
+
+		});
+
 	}
 
 	// Percorre os elementos da tela e os coloca em this.el
@@ -335,7 +381,7 @@ export class WhatsAppController{
 
 		});
 
-		// Submete os dados do formulário
+		// Submete os dados do formulário de Adicionar Contato
 		this.el.formPanelAddContact.on('submit', e => {
 
 			e.preventDefault();
@@ -348,11 +394,20 @@ export class WhatsAppController{
 
 				if(data.name){
 
-					this._user.addContact(contact).then(() => {
+					Chat.createIfNotExists(this._user.email, contact.email).then(chat => {
 
-						this.el.btnClosePanelAddContact.click();
-						console.info('Contato adicionado')				
-					
+						contact.chatId = chat.id;
+						this._user.chatId = chat.id;
+
+						contact.addContact(this._user);
+
+						this._user.addContact(contact).then(() => {
+
+							this.el.btnClosePanelAddContact.click();
+							console.info('Contato adicionado')				
+						
+						});
+
 					});
 
 				} else {
@@ -629,9 +684,17 @@ export class WhatsAppController{
 		// Enviar Mensagem
 		this.el.btnSend.on('click', e => {
 
-			console.log(this.el.inputText.innerHTML);
+			Message.send(
+				this._contactActive.chatId, 
+				this._user.email,
+				'text',
+				this.el.inputText.innerHTML
+			);
+
 			this.el.inputText.innerHTML = '';
-			this.el.inputPlaceholder.show();
+			this.el.panelEmojis.removeClass('open');
+
+			// this.el.inputPlaceholder.show();
 
 		});
 
