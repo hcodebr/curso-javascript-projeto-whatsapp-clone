@@ -7,7 +7,7 @@ import 'firebase/compat/firestore';
 export class Firebase{
   constructor(){
     this._config = {
-        // configurações do firebase
+        // firebase config
     }
     this.init();
   }
@@ -15,11 +15,11 @@ export class Firebase{
   init(){
     // Initialize Firebase
 
-    if(!this._initialized){
+    if(!window._initializedFirebase){
 
       const firebaseApp = firebase.initializeApp(this._config);
       
-      this._initialized = true;
+      window._initializedFirebase = true;
 
     }
   }
@@ -41,10 +41,12 @@ export class Firebase{
 
       firebase.auth().signInWithPopup(provider).then(result => {
 
+        // token do usuário no firebase, é usada por segurança pois é temporário
         let token = result.credential.accessToken;
+        
         let user = result.user;
 
-        s(user,token);
+        s({user:user,token:token});
 
       }).catch(err=>{
 
@@ -57,4 +59,3 @@ export class Firebase{
   }
 
 }
-
