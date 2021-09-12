@@ -179,18 +179,27 @@ export class WhatsAppController{
 			display:'flex'
 		})
 
+		this.el.panelMessagesContainer.innerHTML = '';
+
 		// Ordenação das mensagens na tela
 		Message.getRef(this._contactActive.chatId).orderBy('timeStamp')
 		.onSnapshot(docs=>{
 
-			this.el.panelMessagesContainer.innerHTML = '';
+			let scrollTop = this.el.panelMessagesContainer.scrollTop; // topo do scroll
+
+			let scrollTopMax = (                                      // máximo que se consegue empurrar o scroll
+				this.el.panelMessagesContainer.scrollHeight           // altura total de toda a conversa
+				- this.el.panelMessagesContainer.offsetHeight         // tamanho fixo da conversa na tela
+			); 
+
+			let autoScroll = (scrollTop >= scrollTopMax);             // Se o topo do scroll for igual ao topo máximo, então a pessoa está no fim da conversa
 
 			docs.forEach(doc => {
 
 				let data = doc.data();
 				data.id = doc.id;
 
-				if(!this.el.panelMessagesContainer.querySelector('#'+data.id)){
+				if(!this.el.panelMessagesContainer.querySelector('#_'+data.id)){
 
 					let message = new Message();
 
@@ -205,6 +214,18 @@ export class WhatsAppController{
 				}				
 
 			});
+
+			if(autoScroll) {
+
+				this.el.panelMessagesContainer.scrollTop = 
+				(this.el.panelMessagesContainer.scrollHeight 
+				- this.el.panelMessagesContainer.offsetHeight); 
+
+			} else {
+
+				this.el.panelMessagesContainer.scrollTop = scrollTop;
+
+			}
 
 		});
 
@@ -308,6 +329,20 @@ export class WhatsAppController{
 
 	// Inicia os eventos que os componentes da tela realizam
 	initEvents(){
+
+		// Busca de contatos
+		this.el.inputSearchContacts.on('keyup', e=>{
+
+			if(this.el.inputSearchContacts.value.length > 0){
+				this.el.inputSearchContactsPlaceholder.hide();
+			} else {
+				this.el.inputSearchContactsPlaceholder.show();
+			}
+
+			// Faz a busca de acordo com o que o usuário escreveu
+			this._user.getContacts(this.el.inputSearchContacts.value);
+
+		});
 
 		// Abre o painel para Editar Perfil
 		this.el.myPhoto.on('click', e => {

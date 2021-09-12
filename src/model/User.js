@@ -83,11 +83,14 @@ export class User extends Model{
 		.set(contact.toJSON());
 	}
 
-	getContacts(){
+	getContacts(filter = ''){
+
+		console.log(filter);
 
 		return new Promise((s,f) => {
 
-			User.getContactsRef(this.email).onSnapshot(docs=>{
+			// Esse comando >= tem problema
+			User.getContactsRef(this.email).where('name', '>=', filter).onSnapshot(docs=>{
 
 				let contacts = [];
 
