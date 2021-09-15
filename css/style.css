@@ -3356,7 +3356,7 @@ html[dir=rtl] ._3DeDN{
     height:100%
 }
 html[dir] ._3qlW9{
-    background-color:#f7f9fa;
+    background-color:#052433 /* #f7f9fa */;
     cursor:default;
     padding-bottom:28px;
     padding-top:28px
@@ -16135,4 +16135,13 @@ html[dir=rtl] ._2ICcy:after{
 }
 #main {
     display:none;
+}
+._2oKVP{
+    display: flex;
+    justify-content: center;
+}
+#picture-camera {
+    height: 100%;
+    width: auto;
+    text-align: center;
 }
