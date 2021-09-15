@@ -2,12 +2,18 @@
 import firebase from 'firebase/compat/app';
 import 'firebase/compat/auth';
 import 'firebase/compat/firestore';
-
+import 'firebase/compat/storage';
 
 export class Firebase{
   constructor(){
     this._config = {
-        //config
+        apiKey: "AIzaSyCgk1c7coRQI00XkOB1-8srhrzcmDbwPRU",
+        authDomain: "whatsapp-clone-7683c.firebaseapp.com",
+        projectId: "whatsapp-clone-7683c",
+        storageBucket: "whatsapp-clone-7683c.appspot.com",
+        messagingSenderId: "568059323995",
+        appId: "1:568059323995:web:7870f38cc6105c66ea817e",
+        measurementId: "G-SM1RBM5TD1"
     }
     this.init();
   }

@@ -9,8 +9,6 @@ import {Message} from './../model/Message'
 
 export class WhatsAppController{
 	constructor(){
-		console.log("olá WhatsApp");
-
 		this._firebase = new Firebase();
 		this.initAuth();
 		this.loadElements();
@@ -22,7 +20,6 @@ export class WhatsAppController{
 	initAuth(){
 		this._firebase.initAuth().then((response)=>{
 
-			console.log(response);
 			this._user = new User(response.user.email);
 
 			this._user.on('datachange', data => {
@@ -199,17 +196,34 @@ export class WhatsAppController{
 				let data = doc.data();
 				data.id = doc.id;
 
+				let message = new Message();
+
+				message.fromJSON(data);
+
+				let me = (data.from === this._user.email);
+
 				if(!this.el.panelMessagesContainer.querySelector('#_'+data.id)){
 
-					let message = new Message();
+					if(!me){
 
-					message.fromJSON(data);
+						doc.ref.set({
+							status: 'read'
+						}, {
+							merge: true
+						});
 
-					let me = (data.from === this._user.email);
+					}
 
 					let view = message.getViewElement(me);
 
 					this.el.panelMessagesContainer.appendChild(view);
+
+				} else if(me){
+
+					let msgEl = this.el.panelMessagesContainer.querySelector('#_'+data.id);
+
+					// outerHTML pega também o conteúdo que envolve o html especificado
+					msgEl.querySelector('.message-status').innerHTML = message.getStatusViewElement().outerHTML;
 
 				}				
 
@@ -489,11 +503,10 @@ export class WhatsAppController{
 		// Seleciona as fotos a serem importadas
 		this.el.inputPhoto.on('change', e => {
 
-			console.log(this.el.inputPhoto.files);
-
 			[...this.el.inputPhoto.files].forEach(file => {
 
-				console.log(file);
+				Message.sendImage(this._contactActive.chatId, this._user.email, file);
+				
 
 			})
 
